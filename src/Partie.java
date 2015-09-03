@@ -10,7 +10,7 @@ public class Partie implements Curses {
 
   private boolean listeningConsole = false;
   private Thread keyboardListener;
-  private Coordonnees coord;
+  private Coordonnees UserCommand;
 
   public Partie() {
     enableKeyTypedInConsole(true);
@@ -21,30 +21,30 @@ public class Partie implements Curses {
     switch (c) {
       case 'z':
       case 'Z':
-        this.coord = new Coordonnees(0, 1);
-        //System.out.println(coord.getX()+" "+coord.getY());
+        this.UserCommand = new Coordonnees(0, 1);
+        //System.out.println(UserCommand.getX()+" "+UserCommand.getY());
         break;
       case 'q':
       case 'Q':
-        this.coord = new Coordonnees(-1, 0);
-        //System.out.println(coord.getX()+" "+coord.getY());
+        this.UserCommand = new Coordonnees(-1, 0);
+        //System.out.println(UserCommand.getX()+" "+UserCommand.getY());
         break;
       case 's':
       case 'S':
-        this.coord = new Coordonnees(0, -1);
-        //System.out.println(coord.getX()+" "+coord.getY());
+        this.UserCommand = new Coordonnees(0, -1);
+        //System.out.println(UserCommand.getX()+" "+UserCommand.getY());
         break;
       case 'd':
       case 'D':
-        this.coord = new Coordonnees(1, 0);
-        //System.out.println(coord.getX()+" "+coord.getY());
+        this.UserCommand = new Coordonnees(1, 0);
+        //System.out.println(UserCommand.getX()+" "+UserCommand.getY());
         break;
 
     }
   }
 
-  public Coordonnees getCoordonnees() {
-    return coord;
+  public Coordonnees getCommand() {
+    return UserCommand;
   }
   
   public void enableKeyTypedInConsole(boolean on) {
