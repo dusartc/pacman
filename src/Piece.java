@@ -10,7 +10,7 @@ public class Piece extends Element{
   }
   
   public String toString(){
-    return ".";
+    return " . ";
   }
   
 }

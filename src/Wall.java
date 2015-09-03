@@ -1,4 +1,4 @@
-public class Wall extends Cellule {
+public class Wall extends Element {
 
   boolean nord;
   boolean sud;
@@ -35,6 +35,11 @@ public class Wall extends Cellule {
 //    System.out.println(super.getCoordonnes().getX() + " " + super.getCoordonnes().getY()
 //        + " mur ouest supprime");
     ouest = false;
+  }
+  
+  @Override
+  public String toString() {
+    return " # ";
   }
 
 }

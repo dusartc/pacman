@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 
 public class Personnage extends Dynamique {
-  
-  public Personnage (int x, int y) {
-    super (x,y);
+
+  public Personnage(int x, int y) {
+    super(x, y);
   }
 
   @Override
@@ -13,15 +13,15 @@ public class Personnage extends Dynamique {
       return null;
     }
     for (int i = 0; i < choixPossible.size(); i++) {
-      if (super.getOrdre().getX() == choixPossible.get(i).getX() && super.getOrdre().getY() == choixPossible.get(i).getY()) {
+      if (super.getOrdre().getX() == choixPossible.get(i).getX()
+          && super.getOrdre().getY() == choixPossible.get(i).getY()) {
         return choixPossible.get(i);
       }
     }
     return null;
   }
-  
+
   public String toString() {
-    return "P";
+    return " @ ";
   }
 }
-

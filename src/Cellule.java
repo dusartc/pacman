@@ -13,13 +13,13 @@ public class Cellule {
     this.coord = new Coordonnees(x, y);
     this.elem = elem;
   }
-  
-  public Cellule(int x,int y,String s) {
+
+  public Cellule(int x, int y, String s) {
     this(x, y);
     this.string = s;
   }
-  
-  public Cellule(int x,int y,String s, Element elem) {
+
+  public Cellule(int x, int y, String s, Element elem) {
     this(x, y);
     this.string = s;
     this.elem = elem;
@@ -38,32 +38,38 @@ public class Cellule {
   }
 
   public void setVide() {
-    elem=null;
-    monstre=null;
+    elem = null;
+    monstre = null;
+    elem = new Element() {
+      @Override
+      public String toString() {
+        return "   ";
+      }
+    };
   }
 
   public boolean isVide() {
-    return ((elem==null) && (monstre == null));
+    return ((elem == null) && (monstre == null));
   }
 
   public void addMonstre(Element monstre) {
     this.monstre = monstre;
   }
-  
+
   public boolean contientMonstre() {
-    return monstre!=null;
+    return monstre != null;
   }
-  
+
   @Override
   public String toString() {
-    return this.string;
+    return this.elem.toString();
   }
-  
+
   public void setString(String s) {
     this.string = s;
   }
-  
+
   public boolean estMur() {
-    return this.string.equals(" x ");
+    return this.elem instanceof Wall;
   }
 }
