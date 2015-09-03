@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 
 public class Plateau {
 
@@ -28,7 +29,7 @@ public class Plateau {
           if (string.charAt(j) == 'x') {
             plateau[i][j] = new Cellule(j, i, " x ");
           } else {
-            plateau[i][j] = new Cellule(j, i, "   ");
+            plateau[i][j] = new Cellule(j, i, " . ");
           }
         }
         i++;
@@ -43,6 +44,43 @@ public class Plateau {
     catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
+    }
+    int k = 1;
+    int l = 1;
+    int jj;
+    Random rd = new Random();
+    while (true) {
+      plateau[k][l].setString(" @ ");
+      jj = rd.nextInt(1);
+      switch (jj) {
+        case 0:
+          if (!plateau[k+1][l].estMur()) {
+            plateau[k][l].setString("   ");
+            plateau[++k][l].setString(" @ ");
+          }else if (!plateau[k-1][l].estMur()) {
+            plateau[k][l].setString("   ");
+            plateau[--k][l].setString(" @ ");
+          }
+          ;
+        case 1:
+          if (!plateau[k][l+1].estMur()) {
+            plateau[k][l].setString("   ");
+            plateau[k][++l].setString(" @ ");
+          }else if (!plateau[k][l-1].estMur()) {
+            plateau[k][l].setString("   ");
+            plateau[k][--l].setString(" @ ");
+          }
+          break;
+        default:
+          break;
+      }try {
+        Thread.sleep(1000);
+        System.out.println(this);
+        System.out.println("\n\n");
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
   }
 
