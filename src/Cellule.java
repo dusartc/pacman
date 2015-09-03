@@ -3,6 +3,7 @@ public class Cellule {
   private Coordonnees coord;
   private Element elem;
   private Element monstre;
+  private String string = " . ";
 
   public Cellule(int x, int y) {
     this.coord = new Coordonnees(x, y);
@@ -11,6 +12,11 @@ public class Cellule {
   public Cellule(int x, int y, Element elem) {
     this.coord = new Coordonnees(x, y);
     this.elem = elem;
+  }
+  
+  public Cellule(int x,int y,String s) {
+    this(x, y);
+    this.string = s;
   }
 
   public Coordonnees getCoordonnes() {
@@ -44,6 +50,14 @@ public class Cellule {
   
   @Override
   public String toString() {
-    return " . ";
+    return this.string;
+  }
+  
+  public void setString(String s) {
+    this.string = s;
+  }
+  
+  public boolean estMur() {
+    return this.string.equals(" x ");
   }
 }
