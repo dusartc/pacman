@@ -41,4 +41,9 @@ public class Cellule {
   public boolean contientMonstre() {
     return monstre!=null;
   }
+  
+  @Override
+  public String toString() {
+    return " . ";
+  }
 }
