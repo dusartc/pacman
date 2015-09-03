@@ -18,6 +18,12 @@ public class Cellule {
     this(x, y);
     this.string = s;
   }
+  
+  public Cellule(int x,int y,String s, Element elem) {
+    this(x, y);
+    this.string = s;
+    this.elem = elem;
+  }
 
   public Coordonnees getCoordonnes() {
     return coord;
