@@ -2,7 +2,7 @@ public class Test {
 
 
   public static void main(String[] args) {
-    Plateau plateau = new Plateau(10, 10);
+    Plateau plateau = new Plateau(19,15);
     System.out.println(plateau);
   }
 
