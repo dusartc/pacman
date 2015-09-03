@@ -10,7 +10,7 @@ public abstract class Element {
     this.coord = new Coordonnees(x, y);
   }
 
-  public Coordonnees getCoordonnes() {
+  public Coordonnees getCoordonnees() {
     return coord;
   }
 
