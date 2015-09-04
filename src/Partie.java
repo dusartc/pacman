@@ -14,22 +14,33 @@ public class Partie implements Curses {
   private Coordonnees UserCommand;
   private Plateau lePlateau;
   private Dynamique pacBoy;
-  private ArrayList<Dynamique> listeDyn;
+  private ArrayList<Dynamique> listeMonstre;
   private boolean depart;
   private boolean pause;
+  private Dynamique monstre1;
+  private Dynamique monstre2;
+  private Dynamique monstre3;
+  private Dynamique monstre4;
 
   public Partie() {
     enableKeyTypedInConsole(true);
-    this.lePlateau = new Plateau(19, 15, "testmap");
+    this.lePlateau = new Plateau(19, 15, "map");
 
     this.pacBoy = new Personnage(1, 1);
     this.pacBoy.setCible(this.pacBoy.getCoordonnees());
     this.lePlateau.getCelluleByCoordonnees(this.pacBoy.getCoordonnees()).setElement(this.pacBoy);
 
+    
 
-    /*
-     * this.listeDyn = new ArrayList<Dynamique>(); this.listeDyn.add(this.pacBoy);
-     */
+    this.listeMonstre = new ArrayList<Dynamique>();
+    this.monstre1 = new Monstre (1,13);
+    this.monstre2 = new Monstre (12,13);
+    this.monstre1.setCible(this.pacBoy.getCoordonnees());
+    this.lePlateau.getCelluleByCoordonnees(this.monstre1.getCoordonnees()).setElement(this.monstre1);
+    this.monstre2.setCible(this.pacBoy.getCoordonnees());
+    this.lePlateau.getCelluleByCoordonnees(this.monstre2.getCoordonnees()).setElement(this.monstre2);
+    this.listeMonstre.add(monstre1);
+    this.listeMonstre.add(monstre2);
   }
 
   /**
@@ -39,11 +50,13 @@ public class Partie implements Curses {
    */
   public void mouvementTour() {
     this.execMouvement(this.pacBoy, this.mouvementPac());
-   /*
-     * for (int i = 0; i < listeDyn.size(); i++) { if (this.listeDyn.get(i) == this.pacBoy) {
-     * this.execMouvement(this.listeDyn.get(i), this.mouvementPac()); }else{
-     * this.execMouvement(this.listeDyn.get(i), this.mouvementMonstre()); } }
-     */
+    
+    if (depart) {
+      for (int i = 0; i < listeMonstre.size();i++) {
+        this.designationCibleMonstre(listeMonstre.get(i));
+        this.execMouvement(listeMonstre.get(i),this.mouvementMonstre(listeMonstre.get(i)));
+      }
+    }
   }
 
   /**
@@ -95,8 +108,17 @@ public class Partie implements Curses {
     }
   }
 
-  public Coordonnees mouvementMonstre() {
-    return null;
+  public Coordonnees mouvementMonstre(Dynamique entite) {
+    if (entite.getCoordonnees().compare(entite.getCible())) {
+      this.designationCibleMonstre(entite);
+    }
+    Coordonnees destination = entite.choixCroisement(this.analyseCroisement(entite));
+    entite.setOrdre(destination);
+    return destination;
+  }
+  
+  public void designationCibleMonstre (Dynamique entite) {
+    entite.setCible(this.pacBoy.getCoordonnees());
   }
 
   /**
@@ -146,10 +168,11 @@ public class Partie implements Curses {
           new Coordonnees(entite.getCoordonnees().getX() + deplacement.getX(), entite
               .getCoordonnees().getY() + deplacement.getY());
       this.lePlateau.updatePersonnage(entite, tmp);
-      this.designationCible(entite, deplacement);
+      if (entite instanceof Personnage) {
+        this.designationCible(entite, deplacement);
+      }
     }
   }
-
   
   public void designationCible(Dynamique entite, Coordonnees deplacement) {
     Coordonnees actuel = new Coordonnees (entite.getCoordonnees().getX(), entite.getCoordonnees().getY());
@@ -415,7 +438,7 @@ public class Partie implements Curses {
 
   public static void main(String[] args) {
     Partie partieTest = new Partie();
-    System.out.println(partieTest.lePlateau.getCelluleByCoordonnees(new Coordonnees(9,1)).estMur());
+    //System.out.println(partieTest.lePlateau.getCelluleByCoordonnees(new Coordonnees(9,1)).estMur());
     //System.out.print(partieTest.getPlateau().toString());
     while (!partieTest.lePlateau.fini() && !partieTest.pause) {
       try {
