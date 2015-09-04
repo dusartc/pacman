@@ -140,6 +140,7 @@ public class Plateau {
   public Cellule getCelluleByCoordonnees(Coordonnees coordonnees) {
     for (int i = 0; i < tailley; i++) {
       for (int j = 0; j < taillex; j++) {
+
         if (plateau[i][j].getCoordonnes().compare(coordonnees)) {
           return plateau[i][j];
         }
