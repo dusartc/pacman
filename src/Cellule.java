@@ -56,6 +56,9 @@ public class Cellule {
 
   @Override
   public String toString() {
+    if (this.elem == null) {
+      return "   ";
+    }
     return this.elem.toString();
   }
 
