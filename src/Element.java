@@ -24,6 +24,6 @@ public abstract class Element {
 
   @Override
   public String toString() {
-    return " ";
+    return "   ";
   }
 }
