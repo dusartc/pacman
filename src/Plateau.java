@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 public class Plateau {
 
   private Cellule[][] plateau;
@@ -51,6 +49,7 @@ public class Plateau {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    /*
     int k = 1;
     int l = 1;
     int jj;
@@ -94,6 +93,7 @@ public class Plateau {
         e.printStackTrace();
       }
     }
+    */
   }
 
   @Override
@@ -134,7 +134,7 @@ public class Plateau {
      */
     for (Cellule[] cellules : plateau) {
       for (Cellule cellule : cellules) {
-        if (cellule.getCoordonnes().equals(coordonnees)) {
+        if (cellule.getCoordonnes().compare(coordonnees)) {
           return cellule;
         }
       }
@@ -145,7 +145,6 @@ public class Plateau {
   public boolean fini() {
     return this.pieces.isEmpty();
   }
-
-
+  
   // public Joueur getJoueur
 }
