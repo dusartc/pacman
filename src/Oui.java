@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 
@@ -139,5 +141,61 @@ public class Oui {
     assertTrue(p.getCible().compare(c));
 
   }
+  
+  @Test
+  public void testPersonnageChoix() {
+
+    ArrayList<Coordonnees> choixPossible = new ArrayList<Coordonnees>();
+    Personnage p = new Personnage (1,1);
+    p.setOrdre(new Coordonnees(1,2));
+    choixPossible.add(new Coordonnees(2,3));
+    choixPossible.add(new Coordonnees(3,2));
+    choixPossible.add(new Coordonnees(1,2));
+    
+    assertTrue((p.choixCroisement(choixPossible)).compare(choixPossible.get(2)));
+    
+  }
+  
+  @Test
+  public void testPersonnageChoixFaux() {
+
+    ArrayList<Coordonnees> choixPossible = new ArrayList<Coordonnees>();
+    Personnage p = new Personnage (1,1);
+    p.setOrdre(new Coordonnees(1,2));
+    choixPossible.add(new Coordonnees(2,3));
+    choixPossible.add(new Coordonnees(3,2));
+    choixPossible.add(new Coordonnees(2,2));
+    
+    assertTrue(p.choixCroisement(choixPossible)==null);
+    
+  }
+  
+  
+  /*
+  @Test
+  public void testMonstreCalculChoix() {
+    
+    Monstre m = new Monstre(1,1);
+    m.setCible(new Coordonnees(1,2));
+    
+    
+  }
+  
+  @Test
+  public void testMonstreChoix() {
+    ArrayList<Coordonnees> choixPossible = new ArrayList<Coordonnees>();
+    ArrayList<Coordonnees> placementsPossibles = new ArrayList<Coordonnees>();
+
+    Monstre m = new Monstre(1,1);
+    m.setOrdre(new Coordonnees(1,2));
+    choixPossible.add(new Coordonnees(2,3));
+    choixPossible.add(new Coordonnees(3,2));
+    choixPossible.add(new Coordonnees(1,2));
+    
+    assertTrue((m.choixCroisement(choixPossible)).compare(choixPossible.get(2)));
+
+    
+  }
+  */
 
 }
