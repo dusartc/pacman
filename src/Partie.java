@@ -16,207 +16,199 @@ public class Partie implements Curses {
   private Dynamique pacBoy;
   private ArrayList<Dynamique> listeDyn;
   private boolean depart;
+  private boolean pause;
 
   public Partie() {
     enableKeyTypedInConsole(true);
-    this.lePlateau = new Plateau(19,15);
-    
-    this.pacBoy = new Personnage (1,1);
+    this.lePlateau = new Plateau(19, 15, "testmap");
+
+    this.pacBoy = new Personnage(1, 1);
     this.pacBoy.setCible(this.pacBoy.getCoordonnees());
     this.lePlateau.getCelluleByCoordonnees(this.pacBoy.getCoordonnees()).setElement(this.pacBoy);
-    
-    
-    /*this.listeDyn = new ArrayList<Dynamique>();
-    this.listeDyn.add(this.pacBoy);*/
+
+
+    /*
+     * this.listeDyn = new ArrayList<Dynamique>(); this.listeDyn.add(this.pacBoy);
+     */
   }
 
   /**
    * Gère les déplacements de toutes les entités sur une unité de temps.
+   * 
    * @throws InterruptedException
    */
-  public void mouvementTour () throws InterruptedException {
-    /*if (!this.depart) {
-      Thread.sleep(1000);
-      this.mouvementTour();
-    }*/
-    
+  public void mouvementTour() {
     this.execMouvement(this.pacBoy, this.mouvementPac());
-    
-    /*for (int i = 0; i < listeDyn.size(); i++) {
-      if (this.listeDyn.get(i) == this.pacBoy) {
-        this.execMouvement(this.listeDyn.get(i), this.mouvementPac());
-      }else{
-        this.execMouvement(this.listeDyn.get(i), this.mouvementMonstre());
-      }
-    }*/
-    
-    if (!this.lePlateau.fini()) {
-      Thread.sleep(1000);
-      this.mouvementTour();
-    }else{
-      System.out.println("Bravo !");
-    }
+   /*
+     * for (int i = 0; i < listeDyn.size(); i++) { if (this.listeDyn.get(i) == this.pacBoy) {
+     * this.execMouvement(this.listeDyn.get(i), this.mouvementPac()); }else{
+     * this.execMouvement(this.listeDyn.get(i), this.mouvementMonstre()); } }
+     */
   }
-  
+
   /**
-   * Le pacboy décide, en fonction de son ordre actuel, dans quelle direction il se dirige.
-   * Il test d'abord s'il est arrêté (sur sa cible).
-   * Si c'est le cas et que son ordre est mauvais (dirige vers une case mur) ou s'il ne possède pas d'ordre,
-   * le pacboy annule son ordre actuel et ne bouge pas.
-   * Si l'ordre est bon, il choisit cette direction.
-   * => Conséquence : il faut redéfinir la zone cible de pacBoy.
+   * Le pacboy décide, en fonction de son ordre actuel, dans quelle direction il se dirige. Il test
+   * d'abord s'il est arrêté (sur sa cible). Si c'est le cas et que son ordre est mauvais (dirige
+   * vers une case mur) ou s'il ne possède pas d'ordre, le pacboy annule son ordre actuel et ne
+   * bouge pas. Si l'ordre est bon, il choisit cette direction. => Conséquence : il faut redéfinir
+   * la zone cible de pacBoy.
    * 
-   * Si pacBoy n'est pas sur sa cible (en mouvement), on vérifie si l'ordre actuel de pacBoy correspond
-   * à un déplacement possible. Si c'est le cas, pacBoy choisit ce déplacement.
-   * => Conséquence : redéfinition de la zone cible de pacBoy.
-   * Sinon, on détermine où est placé pacBoy par rapport à sa zone cible actuelle.
-   * On effectue le mouvement de pacBoy vers sa zone cible.
+   * Si pacBoy n'est pas sur sa cible (en mouvement), on vérifie si l'ordre actuel de pacBoy
+   * correspond à un déplacement possible. Si c'est le cas, pacBoy choisit ce déplacement. =>
+   * Conséquence : redéfinition de la zone cible de pacBoy. Sinon, on détermine où est placé pacBoy
+   * par rapport à sa zone cible actuelle. On effectue le mouvement de pacBoy vers sa zone cible.
+   * 
    * @return
    */
   public Coordonnees mouvementPac() {
-    Coordonnees destination = this.pacBoy.choixCroisement (this.analyseCroisement(this.pacBoy));
-    if(this.pacBoy.getCoordonnees().compare(this.pacBoy.getCible())) {
-    // PacBoy est sur sa cible (il est à l'arrêt).
-       if (destination == null) {
-          this.pacBoy.setOrdre(null);
-          // Si l'ordre est mauvais, il est supprimé et il ne bouge pas.
-          return null;
-        }else{
+    Coordonnees destination = this.pacBoy.choixCroisement(this.analyseCroisement(this.pacBoy));
+    if (this.pacBoy.getCoordonnees().compare(this.pacBoy.getCible())) {
+      // PacBoy est sur sa cible (il est à l'arrêt).
+      if (destination == null) {
+        this.pacBoy.setOrdre(null);
+        // Si l'ordre est mauvais, il est supprimé et il ne bouge pas.
+        return null;
+      } else {
         // Si l'ordre est bon, on fait le déplacement voulu par PacBoy.
-          // => Redefinition de la zone cible.
-          return destination;
-        }
-    }else{
+        // => Redefinition de la zone cible.
+        return destination;
+      }
+    } else {
       if (destination != null) {
         // => Redefinition de la zone cible.
         return destination;
-      }else{
+      } else {
         if (this.pacBoy.getCoordonnees().getX() != this.pacBoy.getCible().getX()) {
           if (this.pacBoy.getCoordonnees().getX() > this.pacBoy.getCible().getX()) {
-            return new Coordonnees (-1,0);
-          }else{
-            return new Coordonnees (1,0);
+            return new Coordonnees(-1, 0);
+          } else {
+            return new Coordonnees(1, 0);
           }
-        }else{
+        } else {
           if (this.pacBoy.getCoordonnees().getY() > this.pacBoy.getCible().getY()) {
-            return new Coordonnees (0, -1);
-          }else{
-            return new Coordonnees (0, 1);
+            return new Coordonnees(0, 1);
+          } else {
+            return new Coordonnees(0, -1);
           }
         }
       }
     }
   }
-  
+
   public Coordonnees mouvementMonstre() {
     return null;
   }
-  
+
   /**
-   * Méthode qui, à partir de la position des coordonnées d'un dynamique,
-   * génére une liste des coordonnées des mouvements possibles pour ce dynamique.
-   * On vérifie principalement si la case de destination n'est pas un mur.
+   * Méthode qui, à partir de la position des coordonnées d'un dynamique, génére une liste des
+   * coordonnées des mouvements possibles pour ce dynamique. On vérifie principalement si la case de
+   * destination n'est pas un mur.
+   * 
    * @param entite
    * @return
    */
-  public ArrayList<Coordonnees> analyseCroisement (Dynamique entite) {
+  public ArrayList<Coordonnees> analyseCroisement(Dynamique entite) {
     ArrayList<Coordonnees> result = new ArrayList<Coordonnees>();
     Coordonnees origine = entite.getCoordonnees();
     Coordonnees tmp;
-    
-    tmp = new Coordonnees (origine.getX()+1,origine.getY());
-    System.out.println(tmp.getX() + " " + tmp.getY());
+
+    tmp = new Coordonnees(origine.getX() + 1, origine.getY());
     if (!this.lePlateau.getCelluleByCoordonnees(tmp).estMur()) {
-      result.add(new Coordonnees(1,0));
+      result.add(new Coordonnees(1, 0));
     }
-    tmp = new Coordonnees (origine.getX()-1,origine.getY());
+    tmp = new Coordonnees(origine.getX() - 1, origine.getY());
     if (!this.lePlateau.getCelluleByCoordonnees(tmp).estMur()) {
-      result.add(new Coordonnees(-1,0));
+      result.add(new Coordonnees(-1, 0));
     }
-    tmp = new Coordonnees (origine.getX(),origine.getY()+1);
+    tmp = new Coordonnees(origine.getX(), origine.getY() + 1);
     if (!this.lePlateau.getCelluleByCoordonnees(tmp).estMur()) {
-      result.add(new Coordonnees(0,1));
+      result.add(new Coordonnees(0, 1));
     }
-    tmp = new Coordonnees (origine.getX(),origine.getY()-1);
+    tmp = new Coordonnees(origine.getX(), origine.getY() - 1);
     if (!this.lePlateau.getCelluleByCoordonnees(tmp).estMur()) {
-      result.add(new Coordonnees(0,-1));
+      result.add(new Coordonnees(0, -1));
     }
     return result;
   }
-  
+
   /**
-   * Cette méthode permet de faire exécuter un mouvement à une entité.
-   * Sa conséquence est de retirer l'entité de son emplacement précédent,
-   * et de le placer à son nouvel emplacement.
+   * Cette méthode permet de faire exécuter un mouvement à une entité. Sa conséquence est de retirer
+   * l'entité de son emplacement précédent, et de le placer à son nouvel emplacement.
+   * 
    * @param entite
    * @param deplacement
    */
-  public void execMouvement (Dynamique entite, Coordonnees deplacement) {
+  public void execMouvement(Dynamique entite, Coordonnees deplacement) {
     if (deplacement == null) {
       return;
-    }else{
-      if (deplacement.getY() != 0) {
-        deplacement.setY((deplacement.getY() * -1));
-      }
-      Coordonnees tmp = new Coordonnees (entite.getCoordonnees().getX() + deplacement.getX(), entite.getCoordonnees().getY() + deplacement.getY());
+    } else {
+      Coordonnees tmp =
+          new Coordonnees(entite.getCoordonnees().getX() + deplacement.getX(), entite
+              .getCoordonnees().getY() + deplacement.getY());
       this.lePlateau.updatePersonnage(entite, tmp);
-      entite.setCoordonnees(tmp);
-      // => Envoi au plateau de la modification du placement de l'entité
       this.designationCible(entite, deplacement);
     }
   }
+
   
-  public void designationCible (Dynamique entite, Coordonnees deplacement) {
-    Coordonnees actuel = entite.getCoordonnees();
+  public void designationCible(Dynamique entite, Coordonnees deplacement) {
+    Coordonnees actuel = new Coordonnees (entite.getCoordonnees().getX(), entite.getCoordonnees().getY());
+    Coordonnees tmp = new Coordonnees (actuel.getX(), actuel.getY());
     do {
-      entite.setCible(actuel);
-      actuel.addCoord(deplacement);
-    }while(!this.lePlateau.getCelluleByCoordonnees(actuel).estMur());
+ 
+      tmp.addCoord(deplacement);
+
+      if (!this.lePlateau.getCelluleByCoordonnees(tmp).estMur()) {
+        actuel.addCoord(deplacement);
+      }
+    } while (!this.lePlateau.getCelluleByCoordonnees(tmp).estMur());
+    entite.setCible(actuel);
   }
-  
-  public Plateau getPlateau () {
+
+  public Plateau getPlateau() {
     return this.lePlateau;
   }
-  
+
   public Coordonnees getCommand() {
     return UserCommand;
   }
-  
 
-  
-  
-  
+
+
   void keyTypedInConsole(char c) {
 
     this.depart = true;
-    
+
     switch (c) {
       case 'z':
       case 'Z':
-        this.UserCommand = new Coordonnees(0, 1);
-        //System.out.println(UserCommand.getX()+" "+UserCommand.getY());
+        this.UserCommand = new Coordonnees(0, -1);
+        // System.out.println(UserCommand.getX()+" "+UserCommand.getY());
         break;
       case 'q':
       case 'Q':
         this.UserCommand = new Coordonnees(-1, 0);
-        //System.out.println(UserCommand.getX()+" "+UserCommand.getY());
+        // System.out.println(UserCommand.getX()+" "+UserCommand.getY());
         break;
       case 's':
       case 'S':
-        this.UserCommand = new Coordonnees(0, -1);
-        //System.out.println(UserCommand.getX()+" "+UserCommand.getY());
+        this.UserCommand = new Coordonnees(0, 1);
+        // System.out.println(UserCommand.getX()+" "+UserCommand.getY());
         break;
       case 'd':
       case 'D':
         this.UserCommand = new Coordonnees(1, 0);
-        //System.out.println(UserCommand.getX()+" "+UserCommand.getY());
+        // System.out.println(UserCommand.getX()+" "+UserCommand.getY());
         break;
+      case 'p':
+      case 'P':
+        this.pause = !this.pause;
     }
     this.pacBoy.setOrdre(this.UserCommand);
   }
 
 
-  
+
   public void enableKeyTypedInConsole(boolean on) {
     if (!listeningConsole && on) {
       listeningConsole = true;
@@ -311,8 +303,8 @@ public class Partie implements Curses {
     }
   }
 
-  
- 
+
+
   @Override
   public void reset() {
     // TODO Auto-generated method stub
@@ -418,19 +410,29 @@ public class Partie implements Curses {
   public void background(String color) {
     // TODO Auto-generated method stub
   }
-  
-  
-  
+
+
+
   public static void main(String[] args) {
-    Partie partie = new Partie();
-    try {
-      partie.mouvementTour();
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    Partie partieTest = new Partie();
+    System.out.println(partieTest.lePlateau.getCelluleByCoordonnees(new Coordonnees(9,1)).estMur());
+    //System.out.print(partieTest.getPlateau().toString());
+    while (!partieTest.lePlateau.fini() && !partieTest.pause) {
+      try {
+        partieTest.mouvementTour();
+        Thread.sleep(200);
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      clearScreenBis();
+      partieTest.enableKeyTypedInConsole(false);
+      System.out.print(partieTest.getPlateau().toString());
+      partieTest.enableKeyTypedInConsole(true);
     }
+    System.out.println("Bravo !");
   }
-  
+
   public static void clearScreenBis() {
     System.out.print("\u001b[2J");
   }

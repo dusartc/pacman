@@ -1,9 +1,9 @@
 public abstract class Element {
 
   private Coordonnees coord;
-  
+
   public Element() {
-    
+
   }
 
   public Element(int x, int y) {
@@ -22,4 +22,8 @@ public abstract class Element {
     this.coord = coord;
   }
 
+  @Override
+  public String toString() {
+    return " ";
+  }
 }

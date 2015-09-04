@@ -33,4 +33,7 @@ public class Coordonnees {
     return ((this.x == coord.getX())&&(this.y == coord.getY()));
   }
 
+  public String toString() {
+    return this.x + " " + this.y;
+  }
 }
