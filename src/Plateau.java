@@ -181,10 +181,12 @@ public class Plateau {
   // public Joueur getJoueur
 
   public void updatePersonnage(Dynamique entite, Coordonnees tmp) {
-    if (getCelluleByCoordonnees(tmp).toString().equals(" . ")) {
+    if (getCelluleByCoordonnees(tmp).toString().equals(" . ") && entite instanceof Personnage) {
       pieces--;
-    }
-    getCelluleByCoordonnees(entite.getCoordonnees()).setVide();
+      getCelluleByCoordonnees(entite.getCoordonnees()).setVide();
+    }else {
+      getCelluleByCoordonnees(entite.getCoordonnees()).removeMonster();
+    }    
     getCelluleByCoordonnees(tmp).setElement(entite);
     entite.setCoordonnees(tmp);
     
