@@ -190,5 +190,20 @@ public class Oui {
     
   }
   */
-
+  
+  /*
+   * Doit être lancé dans le terminal
+   * 
+  @Test
+  public void testPartie() {
+    
+    ArrayList<Coordonnees> oui = new ArrayList<Coordonnees>();
+    oui.add(new Coordonnees(0,1));
+    Partie partie = new Partie();
+    assertEquals(partie.analyseCroisement(new Personnage(1,1)),oui);
+    
+  }
+*/
+  
+  
 }
