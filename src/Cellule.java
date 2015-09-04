@@ -56,6 +56,9 @@ public class Cellule {
 
   @Override
   public String toString() {
+    if (this.elem == null) {
+      return "   ";
+    }
     return this.elem.toString();
   }
 
@@ -65,5 +68,9 @@ public class Cellule {
 
   public boolean estMur() {
     return this.elem instanceof Wall;
+  }
+
+  public void removeMonster() {
+    this.monstre = null;
   }
 }

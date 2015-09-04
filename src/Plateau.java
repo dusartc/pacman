@@ -17,7 +17,7 @@ public class Plateau {
     this.taillex = taillex;
     this.tailley = tailley;
     this.plateau = new Cellule[tailley][taillex];
-    this.pieces = 0;
+    this.pieces = -1;
     for (int i = 0; i < tailley; i++) {
       for (int j = 0; j < taillex; j++) {
         this.plateau[i][j] = new Cellule(j, i);
@@ -181,9 +181,15 @@ public class Plateau {
   // public Joueur getJoueur
 
   public void updatePersonnage(Dynamique entite, Coordonnees tmp) {
-    getCelluleByCoordonnees(entite.getCoordonnees()).setVide();
+    if (getCelluleByCoordonnees(tmp).toString().equals(" . ") && entite instanceof Personnage) {
+      pieces--;
+      getCelluleByCoordonnees(entite.getCoordonnees()).setVide();
+    }else {
+      getCelluleByCoordonnees(entite.getCoordonnees()).removeMonster();
+    }    
     getCelluleByCoordonnees(tmp).setElement(entite);
     entite.setCoordonnees(tmp);
+    
   }
 
   public void rmPiece(Coordonnees coordonnees) {
