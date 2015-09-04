@@ -40,12 +40,6 @@ public class Cellule {
   public void setVide() {
     elem = null;
     monstre = null;
-    elem = new Element() {
-      @Override
-      public String toString() {
-        return "   ";
-      }
-    };
   }
 
   public boolean isVide() {
