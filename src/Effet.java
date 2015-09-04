@@ -18,5 +18,13 @@ public class Effet {
   public boolean isPoints() {
     return type == 2;
   }
+  
+  public int getType() {
+    return type;
+  }
+  
+  public boolean equals(Effet e) {
+    return this.type == e.getType();
+  }
 
 }
