@@ -20,11 +20,14 @@ public class Partie implements Curses {
   public Partie() {
     enableKeyTypedInConsole(true);
     this.lePlateau = new Plateau(19,15);
+    
     this.pacBoy = new Personnage (1,1);
-    this.pacBoy.setCible(new Coordonnees(1,1));
-    this.listeDyn = new ArrayList<Dynamique>();
-    this.listeDyn.add(this.pacBoy);
+    this.pacBoy.setCible(this.pacBoy.getCoordonnees());
     this.lePlateau.getCelluleByCoordonnees(this.pacBoy.getCoordonnees()).setElement(this.pacBoy);
+    
+    
+    /*this.listeDyn = new ArrayList<Dynamique>();
+    this.listeDyn.add(this.pacBoy);*/
   }
 
   /**
@@ -32,10 +35,10 @@ public class Partie implements Curses {
    * @throws InterruptedException
    */
   public void mouvementTour () throws InterruptedException {
-    if (!this.depart) {
+    /*if (!this.depart) {
       Thread.sleep(1000);
       this.mouvementTour();
-    }
+    }*/
     
     this.execMouvement(this.pacBoy, this.mouvementPac());
     
@@ -55,7 +58,21 @@ public class Partie implements Curses {
     }
   }
   
-  
+  /**
+   * Le pacboy décide, en fonction de son ordre actuel, dans quelle direction il se dirige.
+   * Il test d'abord s'il est arrêté (sur sa cible).
+   * Si c'est le cas et que son ordre est mauvais (dirige vers une case mur) ou s'il ne possède pas d'ordre,
+   * le pacboy annule son ordre actuel et ne bouge pas.
+   * Si l'ordre est bon, il choisit cette direction.
+   * => Conséquence : il faut redéfinir la zone cible de pacBoy.
+   * 
+   * Si pacBoy n'est pas sur sa cible (en mouvement), on vérifie si l'ordre actuel de pacBoy correspond
+   * à un déplacement possible. Si c'est le cas, pacBoy choisit ce déplacement.
+   * => Conséquence : redéfinition de la zone cible de pacBoy.
+   * Sinon, on détermine où est placé pacBoy par rapport à sa zone cible actuelle.
+   * On effectue le mouvement de pacBoy vers sa zone cible.
+   * @return
+   */
   public Coordonnees mouvementPac() {
     Coordonnees destination = this.pacBoy.choixCroisement (this.analyseCroisement(this.pacBoy));
     if(this.pacBoy.getCoordonnees().compare(this.pacBoy.getCible())) {
@@ -66,10 +83,12 @@ public class Partie implements Curses {
           return null;
         }else{
         // Si l'ordre est bon, on fait le déplacement voulu par PacBoy.
+          // => Redefinition de la zone cible.
           return destination;
         }
     }else{
       if (destination != null) {
+        // => Redefinition de la zone cible.
         return destination;
       }else{
         if (this.pacBoy.getCoordonnees().getX() != this.pacBoy.getCible().getX()) {
@@ -127,7 +146,8 @@ public class Partie implements Curses {
   
   /**
    * Cette méthode permet de faire exécuter un mouvement à une entité.
-   * 
+   * Sa conséquence est de retirer l'entité de son emplacement précédent,
+   * et de le placer à son nouvel emplacement.
    * @param entite
    * @param deplacement
    */
@@ -135,18 +155,23 @@ public class Partie implements Curses {
     if (deplacement == null) {
       return;
     }else{
-      deplacement.addCoord(entite.getCoordonnees());
-      entite.setCoordonnees(deplacement);
+      if (deplacement.getY() != 0) {
+        deplacement.setY((deplacement.getY() * -1));
+      }
+      Coordonnees tmp = new Coordonnees (entite.getCoordonnees().getX() + deplacement.getX(), entite.getCoordonnees().getY() + deplacement.getY());
+      this.lePlateau.updatePersonnage(entite, tmp);
+      entite.setCoordonnees(tmp);
+      // => Envoi au plateau de la modification du placement de l'entité
+      this.designationCible(entite, deplacement);
     }
   }
   
   public void designationCible (Dynamique entite, Coordonnees deplacement) {
     Coordonnees actuel = entite.getCoordonnees();
     do {
-      this.pacBoy.setCible(actuel);
+      entite.setCible(actuel);
       actuel.addCoord(deplacement);
     }while(!this.lePlateau.getCelluleByCoordonnees(actuel).estMur());
-    
   }
   
   public Plateau getPlateau () {
@@ -404,5 +429,9 @@ public class Partie implements Curses {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+  }
+  
+  public static void clearScreenBis() {
+    System.out.print("\u001b[2J");
   }
 }
