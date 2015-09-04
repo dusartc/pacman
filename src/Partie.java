@@ -21,8 +21,11 @@ public class Partie implements Curses {
   private Dynamique monstre2;
   private Dynamique monstre3;
   private Dynamique monstre4;
+  private boolean termine;
+  private String nom;
 
-  public Partie() {
+  public Partie(String nom) {
+    this.nom = nom;
     enableKeyTypedInConsole(true);
     this.lePlateau = new Plateau(19, 15, "map");
 
@@ -36,9 +39,9 @@ public class Partie implements Curses {
     this.monstre1 = new Monstre (1,13);
     this.monstre2 = new Monstre (12,13);
     this.monstre1.setCible(this.pacBoy.getCoordonnees());
-    this.lePlateau.getCelluleByCoordonnees(this.monstre1.getCoordonnees()).setElement(this.monstre1);
+    this.lePlateau.getCelluleByCoordonnees(this.monstre1.getCoordonnees()).addMonstre(this.monstre1);
     this.monstre2.setCible(this.pacBoy.getCoordonnees());
-    this.lePlateau.getCelluleByCoordonnees(this.monstre2.getCoordonnees()).setElement(this.monstre2);
+    this.lePlateau.getCelluleByCoordonnees(this.monstre2.getCoordonnees()).addMonstre(this.monstre2);
     this.listeMonstre.add(monstre1);
     this.listeMonstre.add(monstre2);
   }
@@ -49,12 +52,18 @@ public class Partie implements Curses {
    * @throws InterruptedException
    */
   public void mouvementTour() {
+    if (termine) {
+      return;
+    }
     this.execMouvement(this.pacBoy, this.mouvementPac());
     
     if (depart) {
       for (int i = 0; i < listeMonstre.size();i++) {
         this.designationCibleMonstre(listeMonstre.get(i));
         this.execMouvement(listeMonstre.get(i),this.mouvementMonstre(listeMonstre.get(i)));
+        if (listeMonstre.get(i).getCoordonnees().compare(this.pacBoy.getCoordonnees())) {
+          this.termine = true;
+        }
       }
     }
   }
@@ -195,7 +204,14 @@ public class Partie implements Curses {
   public Coordonnees getCommand() {
     return UserCommand;
   }
+  
+  public boolean getTermine() {
+    return this.termine;
+  }
 
+  public void setTermine(boolean b) {
+    this.termine = b;
+  }
 
 
   void keyTypedInConsole(char c) {
@@ -437,23 +453,35 @@ public class Partie implements Curses {
 
 
   public static void main(String[] args) {
-    Partie partieTest = new Partie();
-    //System.out.println(partieTest.lePlateau.getCelluleByCoordonnees(new Coordonnees(9,1)).estMur());
-    //System.out.print(partieTest.getPlateau().toString());
-    while (!partieTest.lePlateau.fini() && !partieTest.pause) {
-      try {
-        partieTest.mouvementTour();
-        Thread.sleep(200);
-      } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+    Partie partieTest = new Partie("1");
+    boolean partieFinie = partieTest.getTermine();
+    while (!partieFinie) {
+      while (!partieTest.lePlateau.fini() && !partieTest.pause && !partieTest.getTermine()) {
+        try {
+          partieTest.mouvementTour();
+          Thread.sleep(200);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        clearScreenBis();
+        partieTest.enableKeyTypedInConsole(false);
+        System.out.print(partieTest.getPlateau().toString());
+        partieTest.enableKeyTypedInConsole(true);
       }
-      clearScreenBis();
-      partieTest.enableKeyTypedInConsole(false);
-      System.out.print(partieTest.getPlateau().toString());
-      partieTest.enableKeyTypedInConsole(true);
+      if (partieTest.lePlateau.fini()) {
+        System.out.println ("Bravo !");
+        partieFinie = true;
+      }else{
+        try {
+          System.out.println("Votre mort fut lente et douloureuse. Dommage !");
+          Thread.sleep(5000);
+          partieFinie = true;
+        } catch (InterruptedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
     }
-    System.out.println("Bravo !");
   }
 
   public static void clearScreenBis() {
