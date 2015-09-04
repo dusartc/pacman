@@ -69,4 +69,8 @@ public class Cellule {
   public boolean estMur() {
     return this.elem instanceof Wall;
   }
+
+  public void removeMonster() {
+    this.monstre = null;
+  }
 }
