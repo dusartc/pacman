@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 public class Plateau {
 
   private Cellule[][] plateau;
