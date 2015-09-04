@@ -178,4 +178,10 @@ public class Plateau {
     }
   }
   // public Joueur getJoueur
+
+  public void updatePersonnage(Dynamique entite, Coordonnees tmp) {
+    getCelluleByCoordonnees(entite.getCoordonnees()).setVide();
+    getCelluleByCoordonnees(tmp).setElement(entite);
+    entite.setCoordonnees(tmp);
+  }
 }
