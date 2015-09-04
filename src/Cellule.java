@@ -58,6 +58,8 @@ public class Cellule {
   public String toString() {
     if (this.elem == null) {
       return "   ";
+    }else if (monstre != null) {
+      return monstre.toString();
     }
     return this.elem.toString();
   }
