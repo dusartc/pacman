@@ -9,7 +9,7 @@ public class Personnage extends Dynamique {
 
   @Override
   public Coordonnees choixCroisement(ArrayList<Coordonnees> choixPossible) {
-    if (super.getOrdre() == null) {
+    if (super.getOrdre() == null || choixPossible == null) {
       return null;
     }
     for (int i = 0; i < choixPossible.size(); i++) {
