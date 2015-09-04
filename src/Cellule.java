@@ -34,7 +34,11 @@ public class Cellule {
   }
 
   public void setElement(Element elem) {
-    this.elem = elem;
+    if (elem instanceof Monstre) {
+      monstre = elem;
+    }else {
+      this.elem = elem; 
+    }
   }
 
   public void setVide() {
@@ -58,9 +62,10 @@ public class Cellule {
   public String toString() {
     if (this.elem == null) {
       return "   ";
-    }else if (monstre != null) {
+    } else if (monstre != null) {
       return monstre.toString();
     }
+    System.out.println(elem);
     return this.elem.toString();
   }
 
@@ -74,5 +79,7 @@ public class Cellule {
 
   public void removeMonster() {
     this.monstre = null;
+    System.out.println(elem);
+
   }
 }
