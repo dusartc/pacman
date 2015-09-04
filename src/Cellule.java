@@ -60,12 +60,11 @@ public class Cellule {
 
   @Override
   public String toString() {
-    if (this.elem == null) {
+    if (this.elem == null && monstre == null) {
       return "   ";
     } else if (monstre != null) {
       return monstre.toString();
     }
-    System.out.println(elem);
     return this.elem.toString();
   }
 
@@ -79,7 +78,5 @@ public class Cellule {
 
   public void removeMonster() {
     this.monstre = null;
-    System.out.println(elem);
-
   }
 }
